@@ -72,15 +72,15 @@ class CompareAreas extends SlaveProcess {
         while (i1 < sorted1.size && i2 < sorted2.size) {
             if (i1 >= sorted1.size || sorted1[i1][0] > sorted2[i2][0]) {
                 speciesOnly2.push(sorted2[i2][0])
-                csv.writeNext(appendStrings(sorted2[i2], "0", sorted2[i2][11]))
+                csv.writeNext(appendStrings(sorted2[i2], "0", sorted2[i2][sorted2[i2].length - 1]))
                 i2++
             } else if (i2 >= sorted2.size || sorted1[i1][0] < sorted2[i2][0]) {
                 speciesOnly1.push(sorted1[i1][0])
-                csv.writeNext(appendStrings(sorted1[i1], sorted1[i1][11], "0"))
+                csv.writeNext(appendStrings(sorted1[i1], sorted1[i1][sorted1[i1].length - 1], "0"))
                 i1++
             } else if (sorted1[i1][0] == sorted2[i2][0]) {
                 speciesBoth.push(sorted1[i1][0])
-                csv.writeNext(appendStrings(sorted2[i2], sorted1[i1][11], sorted2[i2][11]))
+                csv.writeNext(appendStrings(sorted2[i2], sorted1[i1][sorted1[i1].length - 1], sorted2[i2][sorted2[i2].length - 1]))
                 i1++
                 i2++
             }
