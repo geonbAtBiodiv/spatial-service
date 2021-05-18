@@ -349,7 +349,7 @@ class SlaveProcess {
 
     def downloadSpecies(species) {
         OccurrenceData od = new OccurrenceData()
-        String[] s = od.getSpeciesData(species.q, species.bs, null, null)
+        String[] s = od.getSpeciesData(species.q, species.bs, null, grailsApplication.biocache.facet.speciesID)
 
         def newFiles = []
 

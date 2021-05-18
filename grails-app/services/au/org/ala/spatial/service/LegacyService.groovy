@@ -523,29 +523,17 @@ class LegacyService {
                 String key = reader.getNodeName() // nodeName aka element's name
                 String value = reader.getValue()
 
-                if (key.startsWith("occurrence_year,1942"))
-                    key = key
-
-                if (value.equals("7"))
-                    key = key
-
                 if ("entry".equals(key)) {
                     while (reader.hasMoreChildren()) {
                         reader.moveDown()
                         String key1 = reader.getNodeName() // nodeName aka element's name
                         String value1 = reader.getValue()
-                        if (key1.startsWith("occurrence_year,1942"))
-                            key = key
-                        if (value1.startsWith("occurrence_year,1942"))
-                            key = key
                         if (reader.hasMoreChildren()) {
                             value1 = unmarshal(reader, context, key1.endsWith("s") || key1.endsWith("List"))
                         }
                         reader.moveUp()
                         reader.moveDown()
                         String key2 = reader.getNodeName() // nodeName aka element's name
-                        if (key2.startsWith("occurrence_year,1942"))
-                            key = key
                         Object value2 = reader.getValue()
                         if (reader.hasMoreChildren()) {
                             value2 = unmarshal(reader, context, key2.endsWith("s") || key2.endsWith("List"))

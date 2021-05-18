@@ -19,18 +19,18 @@ public class OccurrenceData {
 
     static final String SPECIES_LIST_SERVICE_CSV = "/occurrences/facets/download?facets=species_guid&lookup=true&count=true";
 
-    public String[] getSpeciesData(String q, String bs, String records_filename) {
-        return getSpeciesData(q, bs, records_filename, "names_and_lsid");
+    public String[] getSpeciesData(String q, String bs, String records_filename, String speciesFacet) {
+        return getSpeciesData(q, bs, records_filename, "names_and_lsid", speciesFacet);
     }
 
-    public String[] getSpeciesData(String q, String bs, String records_filename, String facetName) {
+    public String[] getSpeciesData(String q, String bs, String records_filename, String facetName, String speciesFacet) {
         HashMap<String, Object> result = new HashMap<String, Object>();
 
         HashSet<String> sensitiveSpeciesFound = new HashSet<String>();
 
         //add to 'identified' sensitive list
         try {
-            CSVReader csv = new CSVReader(new StringReader(getSpecies(q + "&fq=" + URLEncoder.encode("-sensitive:[* TO *]", "UTF-8"), bs)));
+            CSVReader csv = new CSVReader(new StringReader(getSpecies(q + "&fq=" + URLEncoder.encode("-sensitive:[* TO *]", "UTF-8"), bs, speciesFacet)));
             List<String[]> fullSpeciesList = csv.readAll();
             csv.close();
             for (int i = 0; i < fullSpeciesList.size(); i++) {
@@ -77,8 +77,8 @@ public class OccurrenceData {
     }
 
 
-    private String getSpecies(String q, String bs) {
-        String url = bs + SPECIES_LIST_SERVICE_CSV + "&q=" + q;
+    private String getSpecies(String q, String bs, String facetName) {
+        String url = bs + SPECIES_LIST_SERVICE_CSV.replace("species_guid", facetName) + "&q=" + q;
 
         try {
             return Util.getUrl(url);

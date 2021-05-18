@@ -134,6 +134,10 @@ biocacheUrl: 'https://biocache.ala.org.au'
 openstreetmap:
   url: 'https://tile.openstreetmap.org'
 
+biocache:
+  facet:
+    speciesID: species_guid
+
 slave.enable: true
 service.enable: true
 

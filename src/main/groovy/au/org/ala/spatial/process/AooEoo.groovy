@@ -55,8 +55,8 @@ class AooEoo extends SlaveProcess {
         // eoo
         def points = facet("lat_long", speciesArea)
 
-        if (points.size() == 0) {
-            throw new Exception("No occurrences are found in the defined area!")
+        if (points.size() <= 2) {
+            throw new Exception("Fewer than 3 occurrences are found in the defined area.")
         }
 
         StringBuilder eWkt = new StringBuilder()

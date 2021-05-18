@@ -50,7 +50,7 @@ class GDMStep1 extends SlaveProcess {
         }
 
         OccurrenceData od = new OccurrenceData()
-        String[] s = od.getSpeciesData(speciesArea.q, speciesArea.bs, null, "names_and_lsid")
+        String[] s = od.getSpeciesData(speciesArea.q, speciesArea.bs, null, "names_and_lsid", grailsApplication.biocache.facet.speciesID)
 
         StringBuilder speciesdata = new StringBuilder()
         HashMap taxonNames = new HashMap()

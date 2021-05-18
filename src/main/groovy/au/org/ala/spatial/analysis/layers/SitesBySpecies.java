@@ -55,55 +55,6 @@ public class SitesBySpecies {
         height = (int) Math.ceil((bbox[3] - bbox[1]) / resolution);
     }
 
-    public static void main(String[] args) {
-
-
-        try {
-            SimpleRegion sr = SimpleShapeFile.parseWKT("POLYGON((110.0 -45.0,165.0 -45.0,165.0 -10.0,110.0 -10.0,110.0 -45.0))");
-            //Records r = new Records("/data/sxs.records");
-            double[] bbox = {110, -45, 165, -10};
-
-            //fetch and merge records
-            File joinedRecords = new File("/data/joinedRecords");
-            StringBuilder sb = new StringBuilder();
-            String file = "/data/sxs.records";
-            Records r = new Records("https://biocache.ala.org.au/ws",
-                    "Macropus%20agilis", bbox, file, null);
-
-            String outputDir = "/data/";
-
-            double resolution = 1;
-
-            //update bbox with spatial extent of records
-            double minx = 180, miny = 90, maxx = -180, maxy = -90;
-            for (int i = 0; i < r.getRecordsSize(); i++) {
-                minx = Math.min(minx, r.getLongitude(i));
-                maxx = Math.max(maxx, r.getLongitude(i));
-                miny = Math.min(miny, r.getLatitude(i));
-                maxy = Math.max(maxy, r.getLatitude(i));
-            }
-            minx -= resolution;
-            miny -= resolution;
-            maxx += resolution;
-            maxy += resolution;
-            bbox[0] = Math.max(bbox[0], minx);
-            bbox[2] = Math.min(bbox[2], maxx);
-            bbox[1] = Math.max(bbox[1], miny);
-            bbox[3] = Math.min(bbox[3], maxy);
-
-
-            SitesBySpecies sxs = new SitesBySpecies(resolution, bbox);
-
-            sxs.write(r, outputDir, sr, null);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
     /**
      * @param resolution
      */
@@ -275,7 +226,6 @@ public class SitesBySpecies {
             }
         }
 
-        int count = 0;
         for (int i = 0; i < records.getRecordsSize(); i++) {
             if (!used[i]) {
                 int y = (int) ((records.getLatitude(i) - bbox[1]) / resolution);
@@ -286,7 +236,6 @@ public class SitesBySpecies {
                     if (x >= 0 && x < width) {
                         used[i] = true;
                         bs[x][records.getSpeciesNumber(i)]++;
-                        count++;
                     }
                 }
             }

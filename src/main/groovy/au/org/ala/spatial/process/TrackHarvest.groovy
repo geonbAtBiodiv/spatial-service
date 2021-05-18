@@ -52,7 +52,7 @@ class TrackHarvest extends SlaveProcess {
                     'eventID'          : 'area_name'
             ]
             //get
-            String records = new URL("${biocacheServiceUrl}/occurrences/index/download?facet=off&q=data_provider_uid:${dataProviderIds.join(" OR data_provider_uid:")}&fields=${mapping.keySet().join(",")}&reasonTypeId=10&zip=false&qa=none&dwcHeaders=true").text
+            String records = new URL("${biocacheServiceUrl}/occurrences/index/download?facet=off&q=${dataProviderUid}:${dataProviderIds.join(" OR ${dataProviderUid}:")}&fields=${mapping.keySet().join(",")}&reasonTypeId=10&zip=false&qa=none&dwcHeaders=true").text
 
             CSVReader csv = new CSVReader(new StringReader(records))
 

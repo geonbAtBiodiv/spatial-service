@@ -50,8 +50,8 @@ public class BiocacheLegendObject extends LegendObject {
 
     private void loadFromJson(String legend) {
 
-        boolean isDecade = colourMode.startsWith("occurrence_year_decade") || colourMode.equals("decade");
-        boolean isYear = colourMode.contains("occurrence_year") && !isDecade;
+        boolean isDecade = colourMode.startsWith("occurrence_year_decade") || colourMode.equals("decade") || colourMode.equals("occurrenceYear");
+        boolean isYear = (colourMode.contains("occurrence_year") || colourMode.contains("year")) && !isDecade;
 
         int count = 0;
         int sum = 0;
@@ -118,9 +118,6 @@ public class BiocacheLegendObject extends LegendObject {
                 colour = item.getRed() + "," + item.getGreen() + "," + item.getBlue();
                 line = "\"" + item.getName().replace("\"", "\"\"") + "\"," + colour + "," + item.getCount();
 
-                if (item.getName().startsWith("Camponotus")) {
-                    line = line;
-                }
                 sb.append(line);
             }
             previous = item;
@@ -162,8 +159,8 @@ public class BiocacheLegendObject extends LegendObject {
             logger.error("error reading legend: ", ex);
         }
 
-        boolean isDecade = colourMode.startsWith("occurrence_year_decade") || colourMode.equals("decade");
-        boolean isYear = colourMode.contains("occurrence_year") && !isDecade;
+        boolean isDecade = colourMode.equals("occurrenceYear") || colourMode.startsWith("occurrence_year_decade") || colourMode.equals("decade");
+        boolean isYear = (colourMode.contains("occurrence_year") || colourMode.equals("year")) && !isDecade;
 
         int count = 0;
         int sum = 0;
@@ -295,7 +292,7 @@ public class BiocacheLegendObject extends LegendObject {
     }
 
     public LegendObject getAsIntegerLegend() {
-        if (colourMode.equals("decade")) {
+        if (colourMode.equals("decade") || colourMode.equals("occurrenceYear")) {
             double[] values = new double[categoriesNumeric.size()];
             int i = 0;
             for (double d : categoriesNumeric.keySet()) {

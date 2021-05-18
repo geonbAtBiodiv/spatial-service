@@ -162,10 +162,10 @@ public class Scatterplot {
             }
         }
         if ("occurrence_year_individual".equals(facetName)) {
-            facetName = "occurrence_year";
+            facetName = "year";
         }
         if ("occurrence_year_decade".equals(facetName)) {
-            facetName = "occurrence_year";
+            facetName = "occurrenceYear";
         }
         return facetName;
     }
@@ -1344,7 +1344,7 @@ public class Scatterplot {
         if (legends.get(colourmode) != null) {
             return legends.get(colourmode);
         } else {
-            String facetToColourBy = colourmode.equals("occurrence_year_decade") ? "occurrence_year" : translateFieldForSolr(colourmode);
+            String facetToColourBy = colourmode.equals("occurrence_year_decade") ? "occurrenceYear" : translateFieldForSolr(colourmode);
 
             try {
                 String url = scatterplotDTO.getForegroundOccurrencesBs()
@@ -1372,7 +1372,9 @@ public class Scatterplot {
                 LegendObject lo = new BiocacheLegendObject(colourmode, s);
 
                 //test for exceptions
-                if (!colourmode.contains(",") && (colourmode.equals("uncertainty") || colourmode.equals("decade") || colourmode.equals("occurrence_year") || colourmode.equals("coordinate_uncertainty"))) {
+                if (!colourmode.contains(",") && (colourmode.equals("uncertainty") || colourmode.equals("decade") ||
+                        colourmode.equals("occurrence_year") || colourmode.equals("coordinate_uncertainty") ||
+                        colourmode.equals("occurrenceYear") || colourmode.equals("coordinateUncertaintyInMeters"))) {
                     lo = ((BiocacheLegendObject) lo).getAsIntegerLegend();
 
                     //apply cutpoints to colourMode string
@@ -1382,28 +1384,29 @@ public class Scatterplot {
                     float[] cutpointmins = l.getCutoffMinFloats();
                     StringBuilder sb = new StringBuilder();
                     //NQ 20140109: use the translated SOLR field as the colour mode so that "decade" does not cause an issue
-                    String newFacet = colourmode.equals("decade") ? "occurrence_year" : colourmode;
+                    String newFacet = colourmode.equals("decade") ? "occurrenceYear" : colourmode;
                     sb.append(newFacet);
                     int i = 0;
-                    int lasti = 0;
                     while (i < cutpoints.length) {
                         if (i == cutpoints.length - 1 || cutpoints[i] != cutpoints[i + 1]) {
                             if (i > 0) {
                                 sb.append(",").append(cutpointmins[i]);
-                                if (colourmode.equals("occurrence_year") || colourmode.equals("decade"))
+                                if (colourmode.equals("occurrence_year") || colourmode.equals("decade") ||
+                                        colourmode.equals("occurrenceYear"))
                                     sb.append("-01-01T00:00:00Z");
                             } else {
                                 sb.append(",*");
                             }
                             sb.append(",").append(cutpoints[i]);
-                            if (colourmode.equals("occurrence_year") || colourmode.equals("decade"))
+                            if (colourmode.equals("occurrence_year") || colourmode.equals("decade") ||
+                                    colourmode.equals("occurrenceYear"))
                                 sb.append("-12-31T00:00:00Z");
-                            lasti = i;
                         }
                         i++;
                     }
                     String newColourMode = sb.toString();
-                    if (colourmode.equals("occurrence_year") || colourmode.equals("decade")) {
+                    if (colourmode.equals("occurrence_year") || colourmode.equals("decade") ||
+                            colourmode.equals("occurrenceYear")) {
                         newColourMode = newColourMode.replace(".0", "");
                     }
 
@@ -1428,7 +1431,8 @@ public class Scatterplot {
                     legends.put(newColourMode, newlo);
 
                     lo = newlo;
-                } else if (!colourmode.contains(",") && (colourmode.equals("occurrence_year_decade") || colourmode.equals("decade"))) {
+                } else if (!colourmode.contains(",") && (colourmode.equals("occurrence_year_decade") ||
+                        colourmode.equals("decade") || colourmode.equals("occurrenceYear"))) {
                     TreeSet<Integer> decades = new TreeSet<Integer>();
                     for (double d : ((BiocacheLegendObject) lo).categoriesNumeric.keySet()) {
                         decades.add((int) (d / 10));
@@ -1436,7 +1440,7 @@ public class Scatterplot {
                     ArrayList<Integer> d = new ArrayList<Integer>(decades);
 
                     StringBuilder sb = new StringBuilder();
-                    sb.append("occurrence_year");
+                    sb.append("occurrenceYear");
                     for (int i = (d.size() > 0 && d.get(0) > 0 ? 0 : 1); i < d.size(); i++) {
                         if (i > 0) {
                             sb.append(",").append(d.get(i));
