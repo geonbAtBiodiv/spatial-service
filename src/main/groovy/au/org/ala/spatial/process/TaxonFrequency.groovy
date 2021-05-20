@@ -150,7 +150,7 @@ class TaxonFrequency extends SlaveProcess {
             sum1 += v1 ?: 0
             sum2 += v2 ?: 0
 
-            if (v1 != null && v2 != 0) {
+            if (v1 != null && v2 != null && v2 != 0) {
                 ratio.add(y, v1 / v2)
             }
 
